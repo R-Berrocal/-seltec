@@ -8,6 +8,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { GroupModule } from './group/group.module';
 import { CommonModule } from './common/common.module';
 import { HandleExceptionsModule } from './handle-exceptions/handle-exceptions.module';
+import { CompanyModule } from './company/company.module';
 
 @Module({
   imports: [
@@ -24,11 +25,12 @@ import { HandleExceptionsModule } from './handle-exceptions/handle-exceptions.mo
       url: EnvConfiguration().databaseUrl,
       logging: EnvConfiguration().environment === 'dev',
       autoLoadEntities: true,
-      synchronize: EnvConfiguration().environment === 'development',
+      synchronize: EnvConfiguration().environment === 'dev',
     }),
     CommonModule,
     GroupModule,
     HandleExceptionsModule,
+    CompanyModule,
   ],
   controllers: [AppController],
   providers: [AppService],
