@@ -9,6 +9,7 @@ import { GroupModule } from './group/group.module';
 import { CommonModule } from './common/common.module';
 import { HandleExceptionsModule } from './handle-exceptions/handle-exceptions.module';
 import { CompanyModule } from './company/company.module';
+import { RoleEmployeeModule } from './role-employee/role-employee.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { CompanyModule } from './company/company.module';
     GroupModule,
     HandleExceptionsModule,
     CompanyModule,
+    RoleEmployeeModule,
   ],
   controllers: [AppController],
   providers: [AppService],
