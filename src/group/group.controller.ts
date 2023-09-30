@@ -32,9 +32,9 @@ export class GroupController extends baseController {
     return this.groupService.create(createGroupDto);
   }
 
-  @Get(':id')
-  findOne(@Param('id', ParseUUIDPipe) id: string) {
-    return this.groupService.findOne(id);
+  @Get(':term')
+  findOne(@Param('term') term: string) {
+    return this.groupService.findOne(term);
   }
 
   @Put(':id')

@@ -9,5 +9,6 @@ import { HandleExceptionsModule } from 'src/handle-exceptions/handle-exceptions.
   imports: [TypeOrmModule.forFeature([RoleEmployee]), HandleExceptionsModule],
   controllers: [RoleEmployeeController],
   providers: [RoleEmployeeService],
+  exports: [RoleEmployeeService],
 })
 export class RoleEmployeeModule {}

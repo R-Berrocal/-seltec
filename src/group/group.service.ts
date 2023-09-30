@@ -1,6 +1,7 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { validate as IsUUID } from 'uuid';
 import { Group } from './entities/group.entity';
 import { CreateGroupDto } from './dto/create-group.dto';
 import { UpdateGroupDto } from './dto/update-group.dto';
@@ -24,9 +25,21 @@ export class GroupService {
     }
   }
 
-  async findOne(id: string) {
-    const group = await this.groupRepository.findOneBy({ id });
-    if (!group) throw new NotFoundException('Group not found');
+  async findOne(term: string) {
+    let group: Group;
+    if (IsUUID(term)) {
+      group = await this.groupRepository.findOne({
+        where: { id: term },
+        relations: ['employees'],
+      });
+    } else {
+      group = await this.groupRepository.findOne({
+        where: { name: term.toUpperCase() },
+        relations: ['employees'],
+      });
+    }
+    console.log({ group, term });
+    if (!group) throw new NotFoundException(`Group with ${term} not found`);
     return group;
   }
 

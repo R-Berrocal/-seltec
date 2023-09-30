@@ -33,9 +33,9 @@ export class RoleEmployeeController extends baseController {
     return this.roleEmployeeService.create(createRoleEmployeeDto);
   }
 
-  @Get(':id')
-  findOne(@Param('id', ParseUUIDPipe) id: string) {
-    return this.roleEmployeeService.findOne(id);
+  @Get(':term')
+  findOne(@Param('term') term: string) {
+    return this.roleEmployeeService.findOne(term);
   }
 
   @Put(':id')

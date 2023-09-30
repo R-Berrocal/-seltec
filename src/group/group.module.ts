@@ -9,5 +9,6 @@ import { HandleExceptionsModule } from 'src/handle-exceptions/handle-exceptions.
   imports: [TypeOrmModule.forFeature([Group]), HandleExceptionsModule],
   controllers: [GroupController],
   providers: [GroupService],
+  exports: [GroupService],
 })
 export class GroupModule {}

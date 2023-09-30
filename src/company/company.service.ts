@@ -1,6 +1,7 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { validate as IsUUID } from 'uuid';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
 import { Company } from './entities/company.entity';
@@ -24,9 +25,22 @@ export class CompanyService {
     }
   }
 
-  async findOne(id: string) {
-    const company = await this.companyRepository.findOneBy({ id });
-    if (!company) throw new NotFoundException('Company not found');
+  async findOne(term: string) {
+    let company: Company;
+
+    if (IsUUID(term)) {
+      company = await this.companyRepository.findOne({
+        where: { id: term },
+        relations: ['employees'],
+      });
+    } else {
+      company = await this.companyRepository.findOne({
+        where: { name: term.toUpperCase() },
+        relations: ['employees'],
+      });
+    }
+
+    if (!company) throw new NotFoundException(`Company with ${term} not found`);
     return company;
   }
 

@@ -32,9 +32,9 @@ export class CompanyController extends baseController {
     return this.companyService.create(createCompanyDto);
   }
 
-  @Get(':id')
-  findOne(@Param('id', ParseUUIDPipe) id: string) {
-    return this.companyService.findOne(id);
+  @Get(':term')
+  findOne(@Param('term') term: string) {
+    return this.companyService.findOne(term);
   }
 
   @Put(':id')
