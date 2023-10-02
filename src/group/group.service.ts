@@ -38,7 +38,6 @@ export class GroupService {
         relations: ['employees'],
       });
     }
-    console.log({ group, term });
     if (!group) throw new NotFoundException(`Group with ${term} not found`);
     return group;
   }
