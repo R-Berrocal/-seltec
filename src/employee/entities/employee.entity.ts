@@ -1,8 +1,16 @@
-import { BeforeInsert, Column, Entity, ManyToMany, ManyToOne } from 'typeorm';
+import {
+  BeforeInsert,
+  Column,
+  Entity,
+  ManyToMany,
+  ManyToOne,
+  OneToMany,
+} from 'typeorm';
 import { CoreEntity } from 'src/common/entities/core.entity';
 import { RoleEmployee } from 'src/role-employee/entities/role-employee.entity';
 import { Company } from 'src/company/entities/company.entity';
 import { Group } from 'src/group/entities/group.entity';
+import { Observation } from 'src/observations/entities/observation.entity';
 
 @Entity({ name: 'employees' })
 export class Employee extends CoreEntity {
@@ -32,6 +40,9 @@ export class Employee extends CoreEntity {
 
   @ManyToMany(() => Group, (group) => group.employees)
   groups: Group[];
+
+  @OneToMany(() => Observation, (observation) => observation.employee)
+  observations: Observation[];
 
   @BeforeInsert()
   emailLowercase() {

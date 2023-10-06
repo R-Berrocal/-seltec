@@ -92,21 +92,21 @@ export class EmployeeService {
     }
   }
 
-  async validateRelations(employeDto: CreateEmployeeDto | UpdateEmployeeDto) {
-    let roleEmployee: RoleEmployee;
-    let company: Company;
-    let groups: Group[];
+  async validateRelations(employeeDto: CreateEmployeeDto | UpdateEmployeeDto) {
+    let roleEmployee: RoleEmployee | undefined;
+    let company: Company | undefined;
+    let groups: Group[] | undefined;
 
-    if (employeDto.role) {
-      roleEmployee = await this.roleEmployeeService.findOne(employeDto.role);
+    if (employeeDto.role) {
+      roleEmployee = await this.roleEmployeeService.findOne(employeeDto.role);
     }
-    if (employeDto.company) {
-      company = await this.companyService.findOne(employeDto.company);
+    if (employeeDto.company) {
+      company = await this.companyService.findOne(employeeDto.company);
       delete company.employees;
     }
 
-    if (employeDto.groups) {
-      const groupPromises = employeDto.groups.map((group) =>
+    if (employeeDto.groups) {
+      const groupPromises = employeeDto.groups.map((group) =>
         this.groupService.findOne(group),
       );
       groups = (await Promise.all(groupPromises)).map((group) => {

@@ -11,6 +11,7 @@ import { HandleExceptionsModule } from './handle-exceptions/handle-exceptions.mo
 import { CompanyModule } from './company/company.module';
 import { RoleEmployeeModule } from './role-employee/role-employee.module';
 import { EmployeeModule } from './employee/employee.module';
+import { ObservationsModule } from './observations/observations.module';
 
 @Module({
   imports: [
@@ -27,7 +28,7 @@ import { EmployeeModule } from './employee/employee.module';
       url: EnvConfiguration().databaseUrl,
       logging: EnvConfiguration().environment === 'dev',
       autoLoadEntities: true,
-      // synchronize: EnvConfiguration().environment === 'dev',
+      synchronize: EnvConfiguration().environment === 'dev',
     }),
     CommonModule,
     GroupModule,
@@ -35,6 +36,7 @@ import { EmployeeModule } from './employee/employee.module';
     CompanyModule,
     RoleEmployeeModule,
     EmployeeModule,
+    ObservationsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
