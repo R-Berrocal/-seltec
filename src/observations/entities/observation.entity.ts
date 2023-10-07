@@ -5,13 +5,13 @@ import { Employee } from 'src/employee/entities/employee.entity';
 @Entity('observations')
 export class Observation extends CoreEntity {
   @Column({ type: 'text', nullable: true })
-  observation: string;
+  observation?: string;
 
   @Column()
-  initDate: Date;
+  initDate: string;
 
   @Column()
-  endDate: Date;
+  endDate: string;
 
   @ManyToOne(() => Employee, (employee) => employee.observations)
   employee: Employee;
