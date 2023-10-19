@@ -1,5 +1,5 @@
 import { Controller, Get, Query } from '@nestjs/common';
-import { PaginationDto } from './dto/Pagination.dto';
+import { PaginationDto } from './dto/pagination.dto';
 import { CommonService } from './common.service';
 import { PaginationOutputType } from './types/paginationOutput.type';
 import { Repository } from 'typeorm';

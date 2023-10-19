@@ -12,6 +12,7 @@ import { CompanyModule } from './company/company.module';
 import { RoleEmployeeModule } from './role-employee/role-employee.module';
 import { EmployeeModule } from './employee/employee.module';
 import { ObservationsModule } from './observations/observations.module';
+import { VehicleModule } from './vehicle/vehicle.module';
 
 @Module({
   imports: [
@@ -24,11 +25,11 @@ import { ObservationsModule } from './observations/observations.module';
       }),
     }),
     TypeOrmModule.forRoot({
-      type: 'mysql',
+      type: 'postgres',
       url: EnvConfiguration().databaseUrl,
       logging: EnvConfiguration().environment === 'dev',
       autoLoadEntities: true,
-      synchronize: EnvConfiguration().environment === 'dev',
+      // synchronize: EnvConfiguration().environment === 'dev',
     }),
     CommonModule,
     GroupModule,
@@ -37,6 +38,7 @@ import { ObservationsModule } from './observations/observations.module';
     RoleEmployeeModule,
     EmployeeModule,
     ObservationsModule,
+    VehicleModule,
   ],
   controllers: [AppController],
   providers: [AppService],

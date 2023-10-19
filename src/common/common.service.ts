@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Repository, FindOptionsWhere } from 'typeorm';
-import { PaginationDto } from './dto/Pagination.dto';
+import { PaginationDto } from './dto/pagination.dto';
 import { PaginationOutputType } from './types/paginationOutput.type';
 
 @Injectable()
