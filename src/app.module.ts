@@ -29,7 +29,7 @@ import { VehicleModule } from './vehicle/vehicle.module';
       url: EnvConfiguration().databaseUrl,
       logging: EnvConfiguration().environment === 'dev',
       autoLoadEntities: true,
-      // synchronize: EnvConfiguration().environment === 'dev',
+      synchronize: EnvConfiguration().environment === 'dev',
     }),
     CommonModule,
     GroupModule,

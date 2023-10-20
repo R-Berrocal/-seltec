@@ -20,4 +20,8 @@ export class CreateVehicleDto {
   @IsString()
   @IsOptional()
   owner?: string;
+
+  @IsString()
+  @IsOptional()
+  company: string;
 }

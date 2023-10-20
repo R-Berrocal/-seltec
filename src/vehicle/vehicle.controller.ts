@@ -6,6 +6,7 @@ import {
   Put,
   Param,
   Delete,
+  ParseUUIDPipe,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -32,8 +33,8 @@ export class VehicleController extends baseController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.vehicleService.findOne(+id);
+  findOne(@Param('id', ParseUUIDPipe) id: string) {
+    return this.vehicleService.findOne(id);
   }
 
   @Put(':id')

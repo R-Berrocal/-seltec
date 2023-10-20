@@ -1,6 +1,7 @@
 import { BeforeInsert, Column, Entity, OneToMany } from 'typeorm';
 import { CoreEntity } from 'src/common/entities/core.entity';
 import { Employee } from 'src/employee/entities/employee.entity';
+import { Vehicle } from 'src/vehicle/entities/vehicle.entity';
 
 @Entity({ name: 'companies' })
 export class Company extends CoreEntity {
@@ -24,6 +25,9 @@ export class Company extends CoreEntity {
 
   @OneToMany(() => Employee, (employee) => employee.company)
   employees: Employee[];
+
+  @OneToMany(() => Vehicle, (vehicle) => vehicle.company)
+  vehicles: Vehicle[];
 
   @BeforeInsert()
   nameUpperCase() {

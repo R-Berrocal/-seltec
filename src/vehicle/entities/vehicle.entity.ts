@@ -1,5 +1,6 @@
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, ManyToOne } from 'typeorm';
 import { CoreEntity } from 'src/common/entities/core.entity';
+import { Company } from 'src/company/entities/company.entity';
 
 @Entity()
 export class Vehicle extends CoreEntity {
@@ -17,4 +18,7 @@ export class Vehicle extends CoreEntity {
 
   @Column({ nullable: true })
   owner?: string;
+
+  @ManyToOne(() => Company, (company) => company.vehicles)
+  company: Company;
 }
