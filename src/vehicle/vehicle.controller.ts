@@ -38,12 +38,15 @@ export class VehicleController extends baseController {
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() updateVehicleDto: UpdateVehicleDto) {
-    return this.vehicleService.update(+id, updateVehicleDto);
+  update(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() updateVehicleDto: UpdateVehicleDto,
+  ) {
+    return this.vehicleService.update(id, updateVehicleDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.vehicleService.remove(+id);
+  remove(@Param('id', ParseUUIDPipe) id: string) {
+    return this.vehicleService.remove(id);
   }
 }

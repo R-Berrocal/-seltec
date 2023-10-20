@@ -31,8 +31,8 @@ export class VehicleService {
     }
   }
 
-  findOne(id: string) {
-    const vehicle = this.vehicleRepository.findOne({
+  async findOne(id: string) {
+    const vehicle = await this.vehicleRepository.findOne({
       where: { id },
       relations: ['company'],
     });
@@ -42,18 +42,40 @@ export class VehicleService {
     return vehicle;
   }
 
-  update(id: number, updateVehicleDto: UpdateVehicleDto) {
-    return `This action updates a #${id} vehicle`;
+  async update(id: string, updateVehicleDto: UpdateVehicleDto) {
+    await this.findOne(id);
+    const { company } = await this.validateRelationsVehicle(updateVehicleDto);
+    try {
+      const vehicle = await this.vehicleRepository.preload({
+        id,
+        ...updateVehicleDto,
+        company,
+      });
+      await this.vehicleRepository.save(vehicle);
+      return vehicle;
+    } catch (error) {
+      this.logger.error(error);
+      this.handleExceptionsService.handleExceptions(error);
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} vehicle`;
+  async remove(id: string) {
+    const vehicle = await this.findOne(id);
+    try {
+      await this.vehicleRepository.softDelete(id);
+      return vehicle;
+    } catch (error) {
+      this.logger.error(error);
+      this.handleExceptionsService.handleExceptions(error);
+    }
   }
 
-  async validateRelationsVehicle({ company: companyId }: CreateVehicleDto) {
+  async validateRelationsVehicle(
+    vehicleDto: CreateVehicleDto | UpdateVehicleDto,
+  ) {
     let company: Company;
-    if (companyId) {
-      company = await this.companyService.findOne(companyId);
+    if (vehicleDto.company) {
+      company = await this.companyService.findOne(vehicleDto.company);
       if (!company) {
         throw new NotFoundException(`Company with ${company.id} not found`);
       }
