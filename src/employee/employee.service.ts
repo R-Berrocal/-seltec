@@ -43,7 +43,13 @@ export class EmployeeService {
 
   async findOne(term: string) {
     let employee: Employee;
-    const relations = ['roleEmployee', 'company', 'groups', 'observations'];
+    const relations = [
+      'roleEmployee',
+      'company',
+      'groups',
+      'observations',
+      'assignedVehicles.vehicle',
+    ];
     if (IsUUID(term)) {
       employee = await this.employeeRepository.findOne({
         where: { id: term },

@@ -1,6 +1,7 @@
-import { Column, Entity, ManyToOne } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 import { CoreEntity } from 'src/common/entities/core.entity';
 import { Company } from 'src/company/entities/company.entity';
+import { AssignedVehicle } from 'src/assigned-vehicle/entities/assigned-vehicle.entity';
 
 @Entity()
 export class Vehicle extends CoreEntity {
@@ -21,4 +22,10 @@ export class Vehicle extends CoreEntity {
 
   @ManyToOne(() => Company, (company) => company.vehicles)
   company: Company;
+
+  @OneToMany(
+    () => AssignedVehicle,
+    (assignedVehicle) => assignedVehicle.vehicle,
+  )
+  assignedVehicles: AssignedVehicle[];
 }

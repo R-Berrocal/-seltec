@@ -13,6 +13,7 @@ import { RoleEmployeeModule } from './role-employee/role-employee.module';
 import { EmployeeModule } from './employee/employee.module';
 import { ObservationsModule } from './observations/observations.module';
 import { VehicleModule } from './vehicle/vehicle.module';
+import { AssignedVehicleModule } from './assigned-vehicle/assigned-vehicle.module';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { VehicleModule } from './vehicle/vehicle.module';
     EmployeeModule,
     ObservationsModule,
     VehicleModule,
+    AssignedVehicleModule,
   ],
   controllers: [AppController],
   providers: [AppService],
