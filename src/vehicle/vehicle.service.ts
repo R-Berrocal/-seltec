@@ -76,10 +76,6 @@ export class VehicleService {
     let company: Company;
     if (vehicleDto.company) {
       company = await this.companyService.findOne(vehicleDto.company);
-      if (!company) {
-        throw new NotFoundException(`Company with ${company.id} not found`);
-      }
-
       delete company.employees;
     }
     return { company };
