@@ -21,6 +21,7 @@ import { AssignedVehicleModule } from './assigned-vehicle/assigned-vehicle.modul
   imports: [
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'public'),
+      exclude: ['/api/(.*)'],
     }),
     ConfigModule.forRoot({
       isGlobal: true,
