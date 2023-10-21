@@ -1,10 +1,12 @@
+import { join } from 'path';
 import { Module } from '@nestjs/common';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { ConfigModule } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import * as Joi from 'joi';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ConfigModule } from '@nestjs/config';
-import * as Joi from 'joi';
 import { EnvConfiguration } from './config/env.config';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { GroupModule } from './group/group.module';
 import { CommonModule } from './common/common.module';
 import { HandleExceptionsModule } from './handle-exceptions/handle-exceptions.module';
@@ -17,6 +19,9 @@ import { AssignedVehicleModule } from './assigned-vehicle/assigned-vehicle.modul
 
 @Module({
   imports: [
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'public'),
+    }),
     ConfigModule.forRoot({
       isGlobal: true,
       load: [EnvConfiguration],
