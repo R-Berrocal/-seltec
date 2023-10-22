@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateAssignedVehicleDto } from './dto/create-assigned-vehicle.dto';
@@ -38,20 +38,48 @@ export class AssignedVehicleService {
     }
   }
 
-  findAll() {
-    return `This action returns all assignedVehicle`;
+  async findOne(id: string) {
+    const assignedVehicle = await this.assignedVehicleRepository.findOne({
+      where: { id },
+      relations: ['vehicle', 'employee'],
+    });
+
+    if (!assignedVehicle) {
+      throw new NotFoundException(`AssignedVehicle with ${id} not found`);
+    }
+
+    return assignedVehicle;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} assignedVehicle`;
+  async update(id: string, updateAssignedVehicleDto: UpdateAssignedVehicleDto) {
+    await this.findOne(id);
+    const { employee, vehicle } = await this.validateRelationsAssignVehicle(
+      updateAssignedVehicleDto,
+    );
+    try {
+      const assignedVehicle = await this.assignedVehicleRepository.preload({
+        id,
+        ...updateAssignedVehicleDto,
+        employee,
+        vehicle,
+      });
+      await this.assignedVehicleRepository.save(assignedVehicle);
+      return assignedVehicle;
+    } catch (error) {
+      this.logger.error(error);
+      this.handleExceptionsService.handleExceptions(error);
+    }
   }
 
-  update(id: number, updateAssignedVehicleDto: UpdateAssignedVehicleDto) {
-    return `This action updates a #${id} assignedVehicle`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} assignedVehicle`;
+  async remove(id: string) {
+    const assignedVehicle = await this.findOne(id);
+    try {
+      await this.assignedVehicleRepository.softDelete(id);
+      return assignedVehicle;
+    } catch (error) {
+      this.logger.error(error);
+      this.handleExceptionsService.handleExceptions(error);
+    }
   }
 
   async validateRelationsAssignVehicle(
@@ -61,12 +89,18 @@ export class AssignedVehicleService {
     let employee: Employee;
     if (assignedVehicleDto.vehicle) {
       vehicle = await this.vehicleService.findOne(assignedVehicleDto.vehicle);
+      delete vehicle.company;
+      delete vehicle.assignedVehicles;
     }
 
     if (assignedVehicleDto.employee) {
       employee = await this.employeeService.findOne(
         assignedVehicleDto.employee,
       );
+      delete employee.company;
+      delete employee.groups;
+      delete employee.assignedVehicles;
+      delete employee.observations;
     }
 
     return { vehicle, employee };
