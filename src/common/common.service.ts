@@ -10,6 +10,7 @@ export class CommonService {
   async findAll<T>(
     { page = 1, limit = 10, ...propsT }: PaginationDto,
     repository: Repository<T>,
+    entities: string[],
   ): Promise<PaginationOutputType<T>> {
     try {
       const count = await repository.count({
@@ -21,6 +22,7 @@ export class CommonService {
         where: propsT as FindOptionsWhere<T>,
         take: limit,
         skip: offset,
+        relations: entities,
       });
 
       return {
