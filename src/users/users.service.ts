@@ -75,7 +75,13 @@ export class UsersService {
   async validateUser({ email, password }: LoginUserDto) {
     const user = await this.userRepository.findOne({
       where: { email },
-      select: { email: true, full_name: true, id: true, is_deleted: true },
+      select: {
+        email: true,
+        password: true,
+        full_name: true,
+        id: true,
+        is_deleted: true,
+      },
     });
 
     if (!user) {
@@ -90,6 +96,7 @@ export class UsersService {
       throw new UnauthorizedException('User is deleted, talk with an admin');
     }
 
+    delete user.password;
     return user;
   }
 

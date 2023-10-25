@@ -21,8 +21,8 @@ async function bootstrap() {
   );
   const environment = EnvConfiguration();
   console.log({ environment });
-  await app.listen(PORT, () =>
-    console.log(`🚀 Server ready at: http://localhost:${3000}/api`),
+  await app.listen(PORT, async () =>
+    console.log(`🚀 Server ready at: ${await app.getUrl()}`),
   );
 }
 bootstrap();
