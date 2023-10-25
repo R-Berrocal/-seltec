@@ -75,7 +75,7 @@ export class UsersService {
   async validateUser({ email, password }: LoginUserDto) {
     const user = await this.userRepository.findOne({
       where: { email },
-      select: { email: true, password: true, id: true, is_deleted: true },
+      select: { email: true, full_name: true, id: true, is_deleted: true },
     });
 
     if (!user) {
