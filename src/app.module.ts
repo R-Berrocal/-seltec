@@ -16,6 +16,8 @@ import { EmployeeModule } from './employee/employee.module';
 import { ObservationsModule } from './observations/observations.module';
 import { VehicleModule } from './vehicle/vehicle.module';
 import { AssignedVehicleModule } from './assigned-vehicle/assigned-vehicle.module';
+import { UsersModule } from './users/users.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -29,6 +31,7 @@ import { AssignedVehicleModule } from './assigned-vehicle/assigned-vehicle.modul
       validationSchema: Joi.object({
         PORT: Joi.number().required(),
         DATABASE_URL: Joi.string().required(),
+        JWT_SECRET: Joi.string().required(),
       }),
     }),
     TypeOrmModule.forRoot({
@@ -47,6 +50,8 @@ import { AssignedVehicleModule } from './assigned-vehicle/assigned-vehicle.modul
     ObservationsModule,
     VehicleModule,
     AssignedVehicleModule,
+    AuthModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
