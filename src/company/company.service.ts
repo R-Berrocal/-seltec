@@ -31,12 +31,12 @@ export class CompanyService {
     if (IsUUID(term)) {
       company = await this.companyRepository.findOne({
         where: { id: term },
-        relations: ['employees'],
+        relations: ['employees', 'vehicles'],
       });
     } else {
       company = await this.companyRepository.findOne({
         where: { name: term.toUpperCase() },
-        relations: ['employees'],
+        relations: ['employees', 'vehicles'],
       });
     }
 
