@@ -30,10 +30,12 @@ export class RoleEmployeeService {
     if (IsUUID(term)) {
       roleEmployee = await this.roleEmployee.findOne({
         where: { id: term },
+        relations: ['employees'],
       });
     } else {
       roleEmployee = await this.roleEmployee.findOne({
         where: { name: term.toUpperCase() },
+        relations: ['employees'],
       });
     }
 
