@@ -8,15 +8,22 @@ import {
   Delete,
   ParseUUIDPipe,
 } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CompanyService } from './company.service';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
 import { createBaseController } from 'src/common/common.controller';
 import { Company } from './entities/company.entity';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { ValidRoles } from 'src/auth/interfaces/valid-roles';
+import { Auth, GetUser } from 'src/auth/decorators';
+import { User } from 'src/users/entities/user.entity';
 
-const baseController = createBaseController<Company>();
+const baseController = createBaseController<Company>(
+  [],
+  ValidRoles.ADMIN,
+  ValidRoles.USER,
+);
 
 @Controller('company')
 export class CompanyController extends baseController {
@@ -27,16 +34,25 @@ export class CompanyController extends baseController {
     super(companyRepository);
   }
 
+  @Auth(ValidRoles.ADMIN)
   @Post()
   create(@Body() createCompanyDto: CreateCompanyDto) {
     return this.companyService.create(createCompanyDto);
   }
 
+  @Auth(ValidRoles.COMPANY)
+  @Get('/auth')
+  findOneUserCompany(@GetUser() user: User) {
+    return this.companyService.findOne(user.company?.id || 'user');
+  }
+
+  @Auth(ValidRoles.ADMIN, ValidRoles.USER)
   @Get(':term')
   findOne(@Param('term') term: string) {
     return this.companyService.findOne(term);
   }
 
+  @Auth(ValidRoles.ADMIN)
   @Put(':id')
   update(
     @Param('id', ParseUUIDPipe) id: string,
@@ -45,6 +61,7 @@ export class CompanyController extends baseController {
     return this.companyService.update(id, updateCompanyDto);
   }
 
+  @Auth(ValidRoles.ADMIN)
   @Delete(':id')
   remove(@Param('id', ParseUUIDPipe) id: string) {
     return this.companyService.remove(id);

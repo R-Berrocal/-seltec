@@ -13,6 +13,8 @@ import { HandleExceptionsService } from 'src/handle-exceptions/handle-exceptions
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ValidRoles } from 'src/auth/interfaces/valid-roles';
 import { LoginUserDto } from 'src/auth/dto/login-user.dto';
+import { Company } from 'src/company/entities/company.entity';
+import { CompanyService } from 'src/company/company.service';
 
 @Injectable()
 export class UsersService {
@@ -21,13 +23,16 @@ export class UsersService {
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
     private readonly handleExceptionService: HandleExceptionsService,
+    private readonly companyService: CompanyService,
   ) {}
 
   async create({ password, ...userDto }: CreateUserDto) {
+    const { company } = await this.validateRelationsUser(userDto);
     try {
       const user = this.userRepository.create({
         ...userDto,
         password: bcrypt.hashSync(password, 10),
+        company,
       });
       await this.userRepository.save(user);
 
@@ -41,6 +46,7 @@ export class UsersService {
   async findOne(id: string) {
     const user = await this.userRepository.findOne({
       where: { id },
+      relations: ['company'],
     });
 
     if (!user) {
@@ -61,8 +67,9 @@ export class UsersService {
     }
     await this.findOne(id);
     this.validateUserAuth(id, authUser);
+    const { company } = await this.validateRelationsUser(updateUserDto);
     try {
-      await this.userRepository.update({ id }, updateUserDto);
+      await this.userRepository.update({ id }, { ...updateUserDto, company });
       return {
         msg: `User with: ${id}. Update successfully `,
       };
@@ -118,5 +125,14 @@ export class UsersService {
     if (idUser !== authUser.id && authUser.role !== ValidRoles.ADMIN) {
       throw new UnauthorizedException('You do not have permissions');
     }
+  }
+
+  async validateRelationsUser(user: CreateUserDto | UpdateUserDto) {
+    let company: Company;
+    if (user.company) {
+      company = await this.companyService.findOne(user.company);
+    }
+
+    return { company };
   }
 }

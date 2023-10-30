@@ -8,13 +8,29 @@ import {
   Delete,
   ParseUUIDPipe,
 } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { ObservationsService } from './observations.service';
 import { CreateObservationDto } from './dto/create-observation.dto';
 import { UpdateObservationDto } from './dto/update-observation.dto';
+import { createBaseController } from 'src/common/common.controller';
+import { Observation } from './entities/observation.entity';
+import { ValidRoles } from 'src/auth/interfaces/valid-roles';
+
+const baseController = createBaseController<Observation>(
+  ['employee'],
+  ValidRoles.ADMIN,
+);
 
 @Controller('observations')
-export class ObservationsController {
-  constructor(private readonly observationsService: ObservationsService) {}
+export class ObservationsController extends baseController {
+  constructor(
+    private readonly observationsService: ObservationsService,
+    @InjectRepository(Observation)
+    readonly observationRepository: Repository<Observation>,
+  ) {
+    super(observationRepository);
+  }
 
   @Post()
   create(@Body() createObservationDto: CreateObservationDto) {
