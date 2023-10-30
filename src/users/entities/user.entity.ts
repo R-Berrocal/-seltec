@@ -1,9 +1,11 @@
 import { ValidRoles } from 'src/auth/interfaces/valid-roles';
+import { Company } from 'src/company/entities/company.entity';
 import {
   BeforeInsert,
   Column,
   CreateDateColumn,
   Entity,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -27,6 +29,9 @@ export class User {
 
   @Column({ type: 'enum', enum: ValidRoles, default: ValidRoles.USER })
   role: ValidRoles;
+
+  @ManyToOne(() => Company, (company) => company.employees)
+  company: Company;
 
   @Column({ default: false })
   is_deleted: boolean;
