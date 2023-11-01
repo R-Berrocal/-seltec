@@ -7,6 +7,7 @@ import { Vehicle } from './entities/vehicle.entity';
 import { HandleExceptionsService } from 'src/handle-exceptions/handle-exceptions.service';
 import { CompanyService } from 'src/company/company.service';
 import { Company } from 'src/company/entities/company.entity';
+import { User } from 'src/users/entities/user.entity';
 
 @Injectable()
 export class VehicleService {
@@ -17,8 +18,9 @@ export class VehicleService {
     private readonly handleExceptionsService: HandleExceptionsService,
     private readonly companyService: CompanyService,
   ) {}
-  async create(createVehicleDto: CreateVehicleDto) {
+  async create(createVehicleDto: CreateVehicleDto, userAuth: User) {
     const { company } = await this.validateRelationsVehicle(createVehicleDto);
+    this.companyService.validateUserAuth(company.id, userAuth);
     try {
       const vehicle = this.vehicleRepository.create({
         ...createVehicleDto,
@@ -42,8 +44,9 @@ export class VehicleService {
     return vehicle;
   }
 
-  async update(id: string, updateVehicleDto: UpdateVehicleDto) {
-    await this.findOne(id);
+  async update(id: string, updateVehicleDto: UpdateVehicleDto, userAuth: User) {
+    const vehicle = await this.findOne(id);
+    this.companyService.validateUserAuth(vehicle.company.id, userAuth);
     const { company } = await this.validateRelationsVehicle(updateVehicleDto);
     try {
       const vehicle = await this.vehicleRepository.preload({
@@ -59,8 +62,9 @@ export class VehicleService {
     }
   }
 
-  async remove(id: string) {
+  async remove(id: string, userAuth: User) {
     const vehicle = await this.findOne(id);
+    this.companyService.validateUserAuth(vehicle.company.id, userAuth);
     try {
       await this.vehicleRepository.softDelete(id);
       return vehicle;
@@ -77,6 +81,8 @@ export class VehicleService {
     if (vehicleDto.company) {
       company = await this.companyService.findOne(vehicleDto.company);
       delete company.employees;
+      delete company.vehicles;
+      delete company.users;
     }
     return { company };
   }
