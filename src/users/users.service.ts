@@ -89,7 +89,9 @@ export class UsersService {
         id: true,
         is_deleted: true,
         role: true,
+        company: { id: true },
       },
+      relations: ['company'],
     });
 
     if (!user) {

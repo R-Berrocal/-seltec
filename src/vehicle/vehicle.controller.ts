@@ -19,7 +19,7 @@ import { Auth, GetUser } from 'src/auth/decorators';
 import { ValidRoles } from 'src/auth/interfaces/valid-roles';
 import { User } from 'src/users/entities/user.entity';
 
-const baseController = createBaseController<Vehicle>();
+const baseController = createBaseController<Vehicle>([], 'company.id');
 
 @Controller('vehicle')
 export class VehicleController extends baseController {

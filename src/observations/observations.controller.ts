@@ -20,6 +20,7 @@ import { Auth } from 'src/auth/decorators';
 
 const baseController = createBaseController<Observation>(
   ['employee'],
+  '',
   ValidRoles.ADMIN,
   ValidRoles.USER,
 );

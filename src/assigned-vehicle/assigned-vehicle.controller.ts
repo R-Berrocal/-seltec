@@ -20,6 +20,7 @@ import { Auth } from 'src/auth/decorators';
 
 const baseController = createBaseController<AssignedVehicle>(
   ['employee', 'vehicle'],
+  '',
   ValidRoles.ADMIN,
   ValidRoles.USER,
 );

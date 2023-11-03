@@ -21,6 +21,7 @@ import { User } from 'src/users/entities/user.entity';
 
 const baseController = createBaseController<Company>(
   [],
+  '',
   ValidRoles.ADMIN,
   ValidRoles.USER,
 );

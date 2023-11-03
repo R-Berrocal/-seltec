@@ -16,7 +16,7 @@ import { ValidRoles } from 'src/auth/interfaces/valid-roles';
 import { createBaseController } from 'src/common/common.controller';
 import { Repository } from 'typeorm';
 
-const baseController = createBaseController<User>([], ValidRoles.ADMIN);
+const baseController = createBaseController<User>([], '', ValidRoles.ADMIN);
 
 @Controller('users')
 export class UsersController extends baseController {
