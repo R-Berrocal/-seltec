@@ -88,6 +88,7 @@ export class UsersService {
         full_name: true,
         id: true,
         is_deleted: true,
+        role: true,
       },
     });
 
