@@ -9,6 +9,7 @@ import { User } from 'src/users/entities/user.entity';
 
 export function createBaseController<T>(
   entities?: string[],
+  searchCompany?: string,
   ...roles: ValidRoles[]
 ) {
   @Controller('/')
@@ -23,8 +24,12 @@ export function createBaseController<T>(
       paginationDto: PaginationDto,
       @GetUser() user: User,
     ): Promise<PaginationOutputType<T>> {
-      if (user.company?.id && user.role === ValidRoles.COMPANY) {
-        paginationDto['company.id'] = user.company?.id;
+      if (
+        searchCompany.length > 0 &&
+        user.company?.id &&
+        user.role === ValidRoles.COMPANY
+      ) {
+        paginationDto[searchCompany] = user.company?.id;
       }
       return this.commonService.findAll<T>(
         paginationDto,

@@ -18,7 +18,7 @@ import { Repository } from 'typeorm';
 import { Auth } from 'src/auth/decorators';
 import { ValidRoles } from 'src/auth/interfaces/valid-roles';
 
-const baseController = createBaseController<Group>([]);
+const baseController = createBaseController<Group>([], '');
 
 @Controller('group')
 export class GroupController extends baseController {

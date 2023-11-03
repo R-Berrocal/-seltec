@@ -18,7 +18,7 @@ import { ValidRoles } from 'src/auth/interfaces/valid-roles';
 import { Auth, GetUser } from 'src/auth/decorators';
 import { User } from 'src/users/entities/user.entity';
 
-const baseController = createBaseController<Employee>();
+const baseController = createBaseController<Employee>([], 'company.id');
 
 @Controller('employee')
 export class EmployeeController extends baseController {
