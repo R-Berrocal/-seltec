@@ -20,9 +20,7 @@ import { Auth } from 'src/auth/decorators';
 
 const baseController = createBaseController<AssignedVehicle>(
   ['employee', 'vehicle'],
-  '',
-  ValidRoles.ADMIN,
-  ValidRoles.USER,
+  'employee.company.id',
 );
 
 @Controller('assigned-vehicle')
@@ -35,7 +33,7 @@ export class AssignedVehicleController extends baseController {
     super(assignedVehicleRepository);
   }
 
-  @Auth(ValidRoles.ADMIN)
+  @Auth(ValidRoles.ADMIN, ValidRoles.COMPANY)
   @Post()
   create(@Body() createAssignedVehicleDto: CreateAssignedVehicleDto) {
     return this.assignedVehicleService.create(createAssignedVehicleDto);
@@ -47,7 +45,7 @@ export class AssignedVehicleController extends baseController {
     return this.assignedVehicleService.findOne(id);
   }
 
-  @Auth(ValidRoles.ADMIN)
+  @Auth(ValidRoles.ADMIN, ValidRoles.COMPANY)
   @Put(':id')
   update(
     @Param('id', ParseUUIDPipe) id: string,
@@ -56,7 +54,7 @@ export class AssignedVehicleController extends baseController {
     return this.assignedVehicleService.update(id, updateAssignedVehicleDto);
   }
 
-  @Auth(ValidRoles.ADMIN)
+  @Auth(ValidRoles.ADMIN, ValidRoles.COMPANY)
   @Delete(':id')
   remove(@Param('id', ParseUUIDPipe) id: string) {
     return this.assignedVehicleService.remove(id);
