@@ -29,7 +29,18 @@ export function createBaseController<T>(
         user.company?.id &&
         user.role === ValidRoles.COMPANY
       ) {
-        paginationDto[searchCompany] = user.company?.id;
+        const value = user.company.id;
+
+        const keys = searchCompany.split('.');
+        let temp = paginationDto;
+
+        for (let i = 0; i < keys.length - 1; i++) {
+          const key = keys[i];
+          temp[key] = temp[key] || {};
+          temp = temp[key];
+        }
+
+        temp[keys[keys.length - 1]] = value;
       }
       return this.commonService.findAll<T>(
         paginationDto,
