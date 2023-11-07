@@ -87,4 +87,37 @@ export class CompanyService {
       );
     }
   }
+
+  async countEmployeesByCompany(userAuth: User) {
+    const queryBuilder = this.companyRepository
+      .createQueryBuilder('company')
+      .leftJoinAndSelect('company.employees', 'employee')
+      .select('company.name', 'company')
+      .addSelect('COUNT(employee.id)', 'employees')
+      .groupBy('company.name');
+
+    if (userAuth.company && userAuth.role === ValidRoles.COMPANY) {
+      queryBuilder.where('company.id = :companyId', {
+        companyId: userAuth.company?.id,
+      });
+    }
+
+    return queryBuilder.getRawMany();
+  }
+  async countVehiclesByCompany(userAuth: User) {
+    const queryBuilder = this.companyRepository
+      .createQueryBuilder('company')
+      .leftJoinAndSelect('company.vehicles', 'vehicle')
+      .select('company.name', 'company')
+      .addSelect('COUNT(vehicle.id)', 'vehicles')
+      .groupBy('company.name');
+
+    if (userAuth.company && userAuth.role === ValidRoles.COMPANY) {
+      queryBuilder.where('company.id = :companyId', {
+        companyId: userAuth.company?.id,
+      });
+    }
+
+    return queryBuilder.getRawMany();
+  }
 }
