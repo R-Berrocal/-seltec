@@ -47,6 +47,18 @@ export class CompanyController extends baseController {
     return this.companyService.findOne(user.company?.id || 'user');
   }
 
+  @Auth()
+  @Get('count-employees')
+  countEmployeesByCompany(@GetUser() user: User) {
+    return this.companyService.countEmployeesByCompany(user);
+  }
+
+  @Auth()
+  @Get('count-vehicles')
+  countVehiclesByCompany(@GetUser() user: User) {
+    return this.companyService.countVehiclesByCompany(user);
+  }
+
   @Auth(ValidRoles.ADMIN, ValidRoles.USER)
   @Get(':term')
   findOne(@Param('term') term: string) {
