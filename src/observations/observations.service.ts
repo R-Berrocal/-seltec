@@ -22,7 +22,6 @@ export class ObservationsService {
       createObservationDto.employeeId,
     );
     try {
-      console.log(createObservationDto);
       const observation = this.observationRepository.create({
         ...createObservationDto,
         employee,
