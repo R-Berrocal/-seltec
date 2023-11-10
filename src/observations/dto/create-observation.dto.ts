@@ -1,23 +1,15 @@
-import {
-  IsDateString,
-  IsNotEmpty,
-  IsOptional,
-  IsString,
-  IsUUID,
-} from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString, IsUUID } from 'class-validator';
 
 export class CreateObservationDto {
   @IsString()
   @IsOptional()
   observation?: string;
 
-  @IsDateString()
   @IsNotEmpty()
-  initDate: string;
+  initDate: Date;
 
-  @IsDateString()
   @IsNotEmpty()
-  endDate: string;
+  endDate: Date;
 
   @IsUUID()
   @IsNotEmpty()

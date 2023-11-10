@@ -7,11 +7,11 @@ export class Observation extends CoreEntity {
   @Column({ type: 'text', nullable: true })
   observation?: string;
 
-  @Column()
-  initDate: string;
+  @Column({ type: 'timestamp' })
+  initDate: Date;
 
-  @Column()
-  endDate: string;
+  @Column({ type: 'timestamp' })
+  endDate: Date;
 
   @ManyToOne(() => Employee, (employee) => employee.observations)
   employee: Employee;
