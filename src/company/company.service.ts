@@ -1,4 +1,9 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  Logger,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { validate as IsUUID } from 'uuid';
@@ -6,6 +11,8 @@ import { CreateCompanyDto } from './dto/create-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
 import { Company } from './entities/company.entity';
 import { HandleExceptionsService } from 'src/handle-exceptions/handle-exceptions.service';
+import { ValidRoles } from 'src/auth/interfaces/valid-roles';
+import { User } from 'src/users/entities/user.entity';
 
 @Injectable()
 export class CompanyService {
@@ -27,16 +34,16 @@ export class CompanyService {
 
   async findOne(term: string) {
     let company: Company;
-
+    const relations = ['employees', 'vehicles', 'users'];
     if (IsUUID(term)) {
       company = await this.companyRepository.findOne({
         where: { id: term },
-        relations: ['employees'],
+        relations,
       });
     } else {
       company = await this.companyRepository.findOne({
         where: { name: term.toUpperCase() },
-        relations: ['employees'],
+        relations,
       });
     }
 
@@ -68,5 +75,49 @@ export class CompanyService {
       this.logger.error(error);
       this.handleExceptionsService.handleExceptions(error);
     }
+  }
+
+  validateUserAuth(companyId: string, authUser: User) {
+    if (
+      authUser.company?.id !== companyId &&
+      authUser.role !== ValidRoles.ADMIN
+    ) {
+      throw new UnauthorizedException(
+        'You do not have permissions to access this company',
+      );
+    }
+  }
+
+  async countEmployeesByCompany(userAuth: User) {
+    const queryBuilder = this.companyRepository
+      .createQueryBuilder('company')
+      .leftJoinAndSelect('company.employees', 'employee')
+      .select('company.name', 'company')
+      .addSelect('COUNT(employee.id)', 'employees')
+      .groupBy('company.name');
+
+    if (userAuth.company && userAuth.role === ValidRoles.COMPANY) {
+      queryBuilder.where('company.id = :companyId', {
+        companyId: userAuth.company?.id,
+      });
+    }
+
+    return queryBuilder.getRawMany();
+  }
+  async countVehiclesByCompany(userAuth: User) {
+    const queryBuilder = this.companyRepository
+      .createQueryBuilder('company')
+      .leftJoinAndSelect('company.vehicles', 'vehicle')
+      .select('company.name', 'company')
+      .addSelect('COUNT(vehicle.id)', 'vehicles')
+      .groupBy('company.name');
+
+    if (userAuth.company && userAuth.role === ValidRoles.COMPANY) {
+      queryBuilder.where('company.id = :companyId', {
+        companyId: userAuth.company?.id,
+      });
+    }
+
+    return queryBuilder.getRawMany();
   }
 }

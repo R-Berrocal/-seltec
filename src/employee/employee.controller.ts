@@ -14,8 +14,11 @@ import { CreateEmployeeDto } from './dto/create-employee.dto';
 import { UpdateEmployeeDto } from './dto/update-employee.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { ValidRoles } from 'src/auth/interfaces/valid-roles';
+import { Auth, GetUser } from 'src/auth/decorators';
+import { User } from 'src/users/entities/user.entity';
 
-const baseController = createBaseController<Employee>();
+const baseController = createBaseController<Employee>([], 'company.id');
 
 @Controller('employee')
 export class EmployeeController extends baseController {
@@ -27,26 +30,31 @@ export class EmployeeController extends baseController {
     super(employeeRepository);
   }
 
+  @Auth(ValidRoles.ADMIN, ValidRoles.COMPANY)
   @Post()
-  create(@Body() createEmployeeDto: CreateEmployeeDto) {
-    return this.employeeService.create(createEmployeeDto);
+  create(@Body() createEmployeeDto: CreateEmployeeDto, @GetUser() user: User) {
+    return this.employeeService.create(createEmployeeDto, user);
   }
 
+  @Auth()
   @Get(':term')
   findOne(@Param('term') term: string) {
     return this.employeeService.findOne(term);
   }
 
+  @Auth(ValidRoles.ADMIN, ValidRoles.COMPANY)
   @Put(':id')
   update(
     @Param('id') id: string,
     @Body() updateEmployeeDto: UpdateEmployeeDto,
+    @GetUser() user: User,
   ) {
-    return this.employeeService.update(id, updateEmployeeDto);
+    return this.employeeService.update(id, updateEmployeeDto, user);
   }
 
+  @Auth(ValidRoles.ADMIN, ValidRoles.COMPANY)
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.employeeService.remove(id);
+  remove(@Param('id') id: string, @GetUser() user: User) {
+    return this.employeeService.remove(id, user);
   }
 }

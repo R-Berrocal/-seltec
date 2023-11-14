@@ -16,7 +16,7 @@ import { ValidRoles } from 'src/auth/interfaces/valid-roles';
 import { createBaseController } from 'src/common/common.controller';
 import { Repository } from 'typeorm';
 
-const baseController = createBaseController<User>([], ValidRoles.ADMIN);
+const baseController = createBaseController<User>([], '', ValidRoles.ADMIN);
 
 @Controller('users')
 export class UsersController extends baseController {
@@ -28,13 +28,13 @@ export class UsersController extends baseController {
   }
 
   @Get(':id')
-  @Auth(ValidRoles.USER, ValidRoles.ADMIN)
+  @Auth(ValidRoles.USER, ValidRoles.ADMIN, ValidRoles.COMPANY)
   findOne(@Param('id', ParseUUIDPipe) id: string) {
     return this.usersService.findOne(id);
   }
 
   @Patch(':id')
-  @Auth(ValidRoles.USER, ValidRoles.ADMIN)
+  @Auth(ValidRoles.USER, ValidRoles.ADMIN, ValidRoles.COMPANY)
   update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateUserDto: UpdateUserDto,

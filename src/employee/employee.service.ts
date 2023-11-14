@@ -12,6 +12,7 @@ import { RoleEmployeeService } from 'src/role-employee/role-employee.service';
 import { RoleEmployee } from 'src/role-employee/entities/role-employee.entity';
 import { Group } from 'src/group/entities/group.entity';
 import { Company } from 'src/company/entities/company.entity';
+import { User } from 'src/users/entities/user.entity';
 
 @Injectable()
 export class EmployeeService {
@@ -24,9 +25,11 @@ export class EmployeeService {
     private readonly companyService: CompanyService,
     private readonly groupService: GroupService,
   ) {}
-  async create(createEmployeeDto: CreateEmployeeDto) {
+  async create(createEmployeeDto: CreateEmployeeDto, userAuth: User) {
     const { roleEmployee, company, groups } =
       await this.validateRelations(createEmployeeDto);
+
+    this.companyService.validateUserAuth(company.id, userAuth);
     try {
       const employee = this.employeeRepository.create({
         ...createEmployeeDto,
@@ -65,11 +68,22 @@ export class EmployeeService {
     if (!employee) {
       throw new NotFoundException(`Employee with ${term} not found`);
     }
+
+    employee.observations.sort((a, b) => {
+      const dateA = new Date(a.createdAt);
+      const dateB = new Date(b.createdAt);
+      return dateB.getTime() - dateA.getTime();
+    });
     return employee;
   }
 
-  async update(id: string, updateEmployeeDto: UpdateEmployeeDto) {
-    await this.findOne(id);
+  async update(
+    id: string,
+    updateEmployeeDto: UpdateEmployeeDto,
+    userAuth: User,
+  ) {
+    const employee = await this.findOne(id);
+    this.companyService.validateUserAuth(employee.company.id, userAuth);
     const { roleEmployee, company, groups } =
       await this.validateRelations(updateEmployeeDto);
     try {
@@ -88,8 +102,9 @@ export class EmployeeService {
     }
   }
 
-  async remove(id: string) {
+  async remove(id: string, userAuth: User) {
     const employee = await this.findOne(id);
+    this.companyService.validateUserAuth(employee.company.id, userAuth);
     try {
       await this.employeeRepository.softDelete(id);
       return employee;
@@ -110,6 +125,8 @@ export class EmployeeService {
     if (employeeDto.company) {
       company = await this.companyService.findOne(employeeDto.company);
       delete company.employees;
+      delete company.vehicles;
+      delete company.users;
     }
 
     if (employeeDto.groups) {

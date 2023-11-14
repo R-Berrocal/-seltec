@@ -6,6 +6,8 @@ import { Group } from './entities/group.entity';
 import { CreateGroupDto } from './dto/create-group.dto';
 import { UpdateGroupDto } from './dto/update-group.dto';
 import { HandleExceptionsService } from 'src/handle-exceptions/handle-exceptions.service';
+import { User } from 'src/users/entities/user.entity';
+import { ValidRoles } from 'src/auth/interfaces/valid-roles';
 
 @Injectable()
 export class GroupService {
@@ -66,5 +68,22 @@ export class GroupService {
       this.logger.error(error);
       this.handleExceptionsService.handleExceptions(error);
     }
+  }
+
+  async countEmployeesByGroup(userAuth: User) {
+    const queryBuilder = this.groupRepository
+      .createQueryBuilder('group')
+      .leftJoinAndSelect('group.employees', 'employee')
+      .select('group.name', 'group')
+      .addSelect('COUNT(employee.id)', 'employees')
+      .groupBy('group.name');
+
+    if (userAuth.company && userAuth.role === ValidRoles.COMPANY) {
+      queryBuilder.where('employee.companyId = :companyId', {
+        companyId: userAuth.company?.id,
+      });
+    }
+
+    return queryBuilder.getRawMany();
   }
 }
