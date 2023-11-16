@@ -53,10 +53,6 @@ export class UsersService {
       throw new NotFoundException(`User not found or Token not valid`);
     }
 
-    if (user.is_deleted) {
-      throw new UnauthorizedException('User is deleted, talk with an admin');
-    }
-
     return user;
   }
 
@@ -132,6 +128,9 @@ export class UsersService {
 
   async validateRelationsUser(user: CreateUserDto | UpdateUserDto) {
     let company: Company;
+    if (user.role === ValidRoles.COMPANY && !user.company) {
+      throw new NotFoundException(`company cannot be empty`);
+    }
     if (user.company) {
       company = await this.companyService.findOne(user.company);
     }
