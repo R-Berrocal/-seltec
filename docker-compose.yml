@@ -50,7 +50,7 @@ services:
       NODE_ENV: ${NODE_ENV}
       PORT: ${PORT}
       DATABASE_URL: postgres://postgres:postgres@postgres-db:5432/seltec-db
-
+      JWT_SECRET: ${JWT_SECRET}
 networks:
   app-seltec:
     driver: bridge
