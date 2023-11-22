@@ -1,14 +1,39 @@
 version: '3'
 
-
 services:
-  app:
 
+  postgres-db:
+    image: postgres
+    container_name: local-postgres
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: postgres
+    networks:
+      - app-seltec
+    volumes:
+      - ./dbfiles/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./postgres-data:/var/lib/postgresql/data
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin4_container
+    restart: always
+    ports:
+      - 5050:80
+    networks:
+      - app-seltec
+    environment:
+      PGADMIN_DEFAULT_EMAIL: test@seltec.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+
+  app:
     build:
       context: .
       target: ${NODE_ENV}
       dockerfile: Dockerfile
-    
+
     volumes:
       - .:/app/
       - /app/node_modules
@@ -16,8 +41,16 @@ services:
     container_name: nest-seltec
     ports:
       - ${PORT}:${PORT}
+    networks:
+      - app-seltec
+    depends_on:
+      - postgres-db
     environment:
       APP_VERSION: ${APP_VERSION}
       NODE_ENV: ${NODE_ENV}
       PORT: ${PORT}
-      DATABASE_URL: ${DATABASE_URL}
+      DATABASE_URL: postgres://postgres:postgres@postgres-db:5432/seltec-db
+
+networks:
+  app-seltec:
+    driver: bridge
