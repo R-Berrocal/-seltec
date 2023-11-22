@@ -5,7 +5,7 @@ import { AssignedVehicle } from 'src/assigned-vehicle/entities/assigned-vehicle.
 
 @Entity()
 export class Vehicle extends CoreEntity {
-  @Column()
+  @Column({ unique: true })
   plate: string;
 
   @Column({ nullable: true })
