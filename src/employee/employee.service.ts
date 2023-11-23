@@ -83,7 +83,7 @@ export class EmployeeService {
     userAuth: User,
   ) {
     const employee = await this.findOne(id);
-    this.companyService.validateUserAuth(employee.company.id, userAuth);
+    this.companyService.validateUserAuth(employee.company?.id, userAuth);
     const { roleEmployee, company, groups } =
       await this.validateRelations(updateEmployeeDto);
     try {
@@ -104,7 +104,7 @@ export class EmployeeService {
 
   async remove(id: string, userAuth: User) {
     const employee = await this.findOne(id);
-    this.companyService.validateUserAuth(employee.company.id, userAuth);
+    this.companyService.validateUserAuth(employee.company?.id, userAuth);
     try {
       await this.employeeRepository.softDelete(id);
       return employee;

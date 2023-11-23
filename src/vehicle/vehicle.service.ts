@@ -46,7 +46,7 @@ export class VehicleService {
 
   async update(id: string, updateVehicleDto: UpdateVehicleDto, userAuth: User) {
     const vehicle = await this.findOne(id);
-    this.companyService.validateUserAuth(vehicle.company.id, userAuth);
+    this.companyService.validateUserAuth(vehicle.company?.id, userAuth);
     const { company } = await this.validateRelationsVehicle(updateVehicleDto);
     try {
       const vehicle = await this.vehicleRepository.preload({
@@ -64,7 +64,7 @@ export class VehicleService {
 
   async remove(id: string, userAuth: User) {
     const vehicle = await this.findOne(id);
-    this.companyService.validateUserAuth(vehicle.company.id, userAuth);
+    this.companyService.validateUserAuth(vehicle.company?.id, userAuth);
     try {
       await this.vehicleRepository.softDelete(id);
       return vehicle;
