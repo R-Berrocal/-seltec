@@ -1,0 +1,1 @@
+import{j as e,a3 as c,a}from"./index-3bd54e17.js";const i=({control:s,name:r="",errorMessage:t,...x})=>e.jsxs("div",{className:"flex flex-col w-full",children:[e.jsx(c,{render:({field:l})=>e.jsx(a.Textarea,{...x,...l,className:"dark:text-white"}),control:s,name:r}),e.jsx(a.Typography,{className:"text-red-400 text-xs italic",children:t})]});export{i as T};
