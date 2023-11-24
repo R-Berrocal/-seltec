@@ -57,11 +57,21 @@ export class EmployeeService {
       employee = await this.employeeRepository.findOne({
         where: { id: term },
         relations,
+        order: {
+          observations: {
+            createdAt: 'DESC',
+          },
+        },
       });
     } else {
       employee = await this.employeeRepository.findOne({
         where: [{ email: term }, { identification: term }],
         relations,
+        order: {
+          observations: {
+            createdAt: 'DESC',
+          },
+        },
       });
     }
 
@@ -69,11 +79,6 @@ export class EmployeeService {
       throw new NotFoundException(`Employee with ${term} not found`);
     }
 
-    employee.observations.sort((a, b) => {
-      const dateA = new Date(a.createdAt);
-      const dateB = new Date(b.createdAt);
-      return dateB.getTime() - dateA.getTime();
-    });
     return employee;
   }
 
