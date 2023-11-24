@@ -1,1 +1,0 @@
-import{j as e}from"./index-3bd54e17.js";const s=({children:a})=>e.jsx("section",{className:"w-full",children:e.jsx("header",{className:"bg-white rounded-sm dark:bg-black",children:e.jsx("article",{className:"text-gray-700 dark:bg-black dark:text-white",children:a})})});export{s as M};
