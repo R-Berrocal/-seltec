@@ -1,23 +1,22 @@
 import {
   IsEmail,
   IsNotEmpty,
+  IsNumberString,
   IsOptional,
-  IsString,
+  MaxLength,
   MinLength,
 } from 'class-validator';
 
 export class CreateCompanyDto {
   @IsNotEmpty()
-  @IsString()
+  @IsNumberString()
+  @MaxLength(9)
+  @MinLength(9)
   nit: string;
 
   @IsNotEmpty()
   @MinLength(5)
   name: string;
-
-  @IsOptional()
-  @MinLength(3)
-  legalName?: string;
 
   @IsOptional()
   @MinLength(3)
