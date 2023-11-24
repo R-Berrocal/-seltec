@@ -20,7 +20,7 @@ export class VehicleService {
   ) {}
   async create(createVehicleDto: CreateVehicleDto, userAuth: User) {
     const { company } = await this.validateRelationsVehicle(createVehicleDto);
-    this.companyService.validateUserAuth(company.id, userAuth);
+    this.companyService.validateUserAuth(company?.id, userAuth);
     try {
       const vehicle = this.vehicleRepository.create({
         ...createVehicleDto,
