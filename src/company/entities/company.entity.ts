@@ -7,6 +7,9 @@ import { User } from 'src/users/entities/user.entity';
 @Entity({ name: 'companies' })
 export class Company extends CoreEntity {
   @Column({ unique: true })
+  nit: string;
+
+  @Column({ unique: true })
   name: string;
 
   @Column({ nullable: true, unique: true })
