@@ -12,9 +12,6 @@ export class Company extends CoreEntity {
   @Column({ unique: true })
   name: string;
 
-  @Column({ nullable: true, unique: true })
-  legalName?: string;
-
   @Column({ nullable: true })
   address?: string;
 
