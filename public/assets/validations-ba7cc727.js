@@ -1,1 +1,0 @@
-import{n as r,o as e,a4 as a}from"./index-a20a86ba.js";const{setLocale:i}=a;i({mixed:{required:"requerido!!!"}});const s=r().shape({label:e().required(),id:e().required(),value:e().required()});export{s as Y};
