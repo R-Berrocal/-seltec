@@ -7,11 +7,11 @@ export class Observation extends CoreEntity {
   @Column({ type: 'text', nullable: true })
   observation?: string;
 
-  @Column({ type: 'timestamp' })
-  initDate: Date;
+  @Column({ type: 'timestamp', nullable: true })
+  initDate?: Date;
 
-  @Column({ type: 'timestamp' })
-  endDate: Date;
+  @Column({ type: 'timestamp', nullable: true })
+  endDate?: Date;
 
   @Column({ type: 'boolean' })
   isApproved: boolean;

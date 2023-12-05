@@ -15,10 +15,10 @@ export class CreateObservationDto {
   @IsNotEmpty()
   isApproved: boolean;
 
-  @IsNotEmpty()
+  @IsOptional()
   initDate: Date;
 
-  @IsNotEmpty()
+  @IsOptional()
   endDate: Date;
 
   @IsUUID()
