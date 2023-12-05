@@ -13,6 +13,9 @@ export class Observation extends CoreEntity {
   @Column({ type: 'timestamp' })
   endDate: Date;
 
+  @Column({ type: 'boolean' })
+  isApproved: boolean;
+
   @ManyToOne(() => Employee, (employee) => employee.observations)
   employee: Employee;
 }
