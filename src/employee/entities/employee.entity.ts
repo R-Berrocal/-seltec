@@ -12,6 +12,7 @@ import { Company } from 'src/company/entities/company.entity';
 import { Group } from 'src/group/entities/group.entity';
 import { Observation } from 'src/observations/entities/observation.entity';
 import { AssignedVehicle } from 'src/assigned-vehicle/entities/assigned-vehicle.entity';
+import { IncomeHistory } from 'src/income-history/entities/income-history.entity';
 
 @Entity({ name: 'employees' })
 export class Employee extends CoreEntity {
@@ -50,6 +51,10 @@ export class Employee extends CoreEntity {
     (assignedVehicle) => assignedVehicle.employee,
   )
   assignedVehicles: AssignedVehicle[];
+
+  @OneToMany(() => IncomeHistory, (incomeHistory) => incomeHistory.employee)
+  incomeHistory: IncomeHistory[];
+
   @BeforeInsert()
   emailLowercase() {
     this.email = this.email?.toLowerCase();

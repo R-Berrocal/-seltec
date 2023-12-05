@@ -19,6 +19,7 @@ import { AssignedVehicleModule } from './assigned-vehicle/assigned-vehicle.modul
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { LocationModule } from './location/location.module';
+import { IncomeHistoryModule } from './income-history/income-history.module';
 
 @Module({
   imports: [
@@ -54,6 +55,7 @@ import { LocationModule } from './location/location.module';
     AuthModule,
     UsersModule,
     LocationModule,
+    IncomeHistoryModule,
   ],
   controllers: [AppController],
   providers: [AppService],
