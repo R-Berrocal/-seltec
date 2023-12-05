@@ -6,7 +6,7 @@ import { Location } from 'src/location/entities/location.entity';
 @Entity()
 export class IncomeHistory extends CoreEntity {
   @Column({ type: 'varchar' })
-  opration: string;
+  operation: string;
 
   @Column({ type: 'varchar', nullable: true })
   observation?: string;
