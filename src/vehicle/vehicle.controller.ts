@@ -30,7 +30,7 @@ export class VehicleController extends baseController {
     super(vehicleRepository);
   }
 
-  @Auth(ValidRoles.ADMIN, ValidRoles.COMPANY)
+  @Auth(ValidRoles.ADMIN)
   @Post()
   create(@Body() createVehicleDto: CreateVehicleDto, @GetUser() user: User) {
     return this.vehicleService.create(createVehicleDto, user);
@@ -42,7 +42,7 @@ export class VehicleController extends baseController {
     return this.vehicleService.findOne(id);
   }
 
-  @Auth(ValidRoles.ADMIN, ValidRoles.COMPANY)
+  @Auth(ValidRoles.ADMIN)
   @Put(':id')
   update(
     @Param('id', ParseUUIDPipe) id: string,
@@ -52,7 +52,7 @@ export class VehicleController extends baseController {
     return this.vehicleService.update(id, updateVehicleDto, user);
   }
 
-  @Auth(ValidRoles.ADMIN, ValidRoles.COMPANY)
+  @Auth(ValidRoles.ADMIN)
   @Delete(':id')
   remove(@Param('id', ParseUUIDPipe) id: string, @GetUser() user: User) {
     return this.vehicleService.remove(id, user);
