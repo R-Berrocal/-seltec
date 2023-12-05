@@ -19,7 +19,7 @@ import { Auth, GetUser } from 'src/auth/decorators';
 import { User } from 'src/users/entities/user.entity';
 
 const baseController = createBaseController<Employee>(
-  ['observations'],
+  ['company', 'observations'],
   'company.id',
 );
 

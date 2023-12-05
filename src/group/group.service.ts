@@ -32,12 +32,12 @@ export class GroupService {
     if (IsUUID(term)) {
       group = await this.groupRepository.findOne({
         where: { id: term },
-        relations: ['employees'],
+        relations: ['employees', 'locations'],
       });
     } else {
       group = await this.groupRepository.findOne({
         where: { name: term.toUpperCase() },
-        relations: ['employees'],
+        relations: ['employees', 'locations'],
       });
     }
     if (!group) throw new NotFoundException(`Group with ${term} not found`);
