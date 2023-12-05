@@ -33,7 +33,7 @@ export class EmployeeController extends baseController {
     super(employeeRepository);
   }
 
-  @Auth(ValidRoles.ADMIN, ValidRoles.COMPANY)
+  @Auth(ValidRoles.ADMIN)
   @Post()
   create(@Body() createEmployeeDto: CreateEmployeeDto, @GetUser() user: User) {
     return this.employeeService.create(createEmployeeDto, user);
@@ -45,7 +45,7 @@ export class EmployeeController extends baseController {
     return this.employeeService.findOne(term);
   }
 
-  @Auth(ValidRoles.ADMIN, ValidRoles.COMPANY)
+  @Auth(ValidRoles.ADMIN)
   @Put(':id')
   update(
     @Param('id') id: string,
@@ -55,7 +55,7 @@ export class EmployeeController extends baseController {
     return this.employeeService.update(id, updateEmployeeDto, user);
   }
 
-  @Auth(ValidRoles.ADMIN, ValidRoles.COMPANY)
+  @Auth(ValidRoles.ADMIN)
   @Delete(':id')
   remove(@Param('id') id: string, @GetUser() user: User) {
     return this.employeeService.remove(id, user);
