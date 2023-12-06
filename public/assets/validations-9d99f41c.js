@@ -1,0 +1,1 @@
+import{v as r,w as e,ac as a}from"./index-8bd41d8c.js";const{setLocale:i}=a;i({mixed:{required:"requerido!!!"}});const s=r().shape({label:e().required(),id:e().required(),value:e().required()});export{s as Y};
