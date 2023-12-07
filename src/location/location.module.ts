@@ -14,5 +14,6 @@ import { GroupModule } from 'src/group/group.module';
   ],
   controllers: [LocationController],
   providers: [LocationService],
+  exports: [LocationService],
 })
 export class LocationModule {}
